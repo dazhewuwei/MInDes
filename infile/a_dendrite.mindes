@@ -1,0 +1,71 @@
+###### whether to test this input file
+InputFile.debug = true
+
+###### Init Solver
+Solver.Loop.begin_step = 0
+Solver.Loop.end_step = 4000
+Solver.Mesh.Nx = 300
+Solver.Mesh.Ny = 300
+Solver.Mesh.Nz = 1
+Solver.Mesh.dr = 0.03
+Solver.Loop.screen_loop_step = 10
+Solver.Loop.screen_output_step = 50
+Solver.Loop.vts_output_step = 50
+
+Solver.PCT.TimeInterval.dt = 1e-4
+
+Postprocess.PCT.VTS.phi_index = true
+Postprocess.PCT.VTS.temperature = true
+Postprocess.PCT.VTS.phi = true
+
+
+Solver.Phases = {[(Grain0),()]}
+
+###### Microstructure
+# .matrix = {[(phi_index),(phi_name),(phi_comp_0_value, phi_comp_1_value, ... )],[(total_comp_0_value, total_comp_1_value, ... )],[(temp_value)]} 
+Preprocess.Microstructure.matrix = {[(0),(Grain0),()],[()],[(0.0)]}
+Preprocess.Microstructure.Matrix.phi = 0.0
+Preprocess.Microstructure.geometry_layer_number = 1
+Preprocess.Microstructure.geometry_layer_0.property = (0,Grain0,1,1,false)
+# .ellipsoid = [(core_x,core_y,core_z),(radius_x,radius_y,radius_z),(rotation_angle_1,rotation_angle_2,rotation_angle_3)] 
+Preprocess.Microstructure.geometry_layer_0.ellipsoid = [(150.0,150.0,0.0),(5.0,5.0,0.0),(0.0,0.0,0.0)]
+Preprocess.Microstructure.geometry_layer_0.T = 0.0
+Preprocess.Microstructure.geometry_layer_0.phi = 1.000000
+
+# ModelsManager.Phi.equation : 0 - Const, 1 - AllenCahn Standard, 2 - AllenCahn Pairwise, 3 - CahnHilliard Standard
+ModelsManager.Phi.equation = 1
+ModelsManager.Phi.Lij.const = 3333.333333
+# ModelsManager.Phi.InterfaceEnergy.int_gradient : 3 - Int_GStandard
+ModelsManager.Phi.InterfaceEnergy.int_gradient = 3
+ModelsManager.Phi.xi_a.const = 0.01
+
+ModelsManager.Phi.InterfaceEnergy.is_anisotropy_on = true
+# ModelsManager.Phi.InterfaceEnergy.anisotropy_model = 0: no anisotropic; 1: 1+\delta\cos(n\theta), e^1; 2: 1+\delta\cos(n\theta), e^2
+ModelsManager.Phi.InterfaceEnergy.anisotropy_model = 2
+# ModelsManager.Phi.InterfaceEnergy.cos_model_paras = (aniso_strength, aniso_module_num, aniso_angle) 
+ModelsManager.Phi.InterfaceEnergy.cos_model_parameters = (0.02,4.0,0)
+
+# ModelsManager.PhiCon.BulkEnergy.type : 1 - DoubleWell, 2 - LQ_Chen, 3 - H_Liang , 7 - HighOrder
+ModelsManager.PhiCon.BulkEnergy.type = 1
+ModelsManager.PhiCon.BulkEnergy.DoubleWell.A = 0.25
+# ModelsManager.PhiConT.OtherEnergy.type = 1 - Supercool Driving Force 
+ModelsManager.PhiConT.OtherEnergy.type = 1
+# ModelsManager.Phi.OtherEnergy.Supercooling.driving_force_para = (alpha, gamma, T_eq) 
+ModelsManager.Phi.OtherEnergy.Supercooling.driving_force_para = (0.9,10.0,1.0)
+# ModelsManager.Phi.OtherEnergy.Supercooling.Energy_Coefficient = (A, B) 
+ModelsManager.Phi.OtherEnergy.Supercooling.Energy_Coefficient = (1.0,1.0)
+
+ModelsManager.PhiCon.Temperature.BulkReaction.latent_heat = true
+ModelsManager.PhiCon.Temperature.kappa = 1.8
+
+# ModelsManager.Temp.equation : 0 - Const, 1 - Standard
+ModelsManager.Temp.equation = 1
+ModelsManager.Temp.Dconst = 1.0
+ModelsManager.Temp.convection = FALSE
+
+# .boundary = [(boundary, temperature), ... ] 
+#              boundary : 0 - x_down , 1 - x_up , 2 - y_down , 3 - y_up , 4 - z_down , 5 - z_up 
+# Solver.Mesh.BoundaryCondition.Temperature.Fix.boundary = [(2,0.0),(3,1.0)]
+
+
+
